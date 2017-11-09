@@ -33,7 +33,17 @@ if (height == height2) and (width == width2):
                             img2_expand[i][j - 1], img2_expand[i][j], img2_expand[i][j + 1],
                             img2_expand[i + 1][j - 1], img2_expand[i + 1][j], img2_expand[i + 1][j + 1]
                             ])
-    np.save("/media/files/yp/rbm/dataset03.npy", content)
+    train_lenth = int(len(content)*0.7)
+    np.save("/media/files/yp/rbm/train03.npy", content[:train_lenth])
+    np.save("/media/files/yp/rbm/valid03.npy", content[train_lenth:])
+    # np.save("/media/files/yp/rbm/dataset05.npy", content)
+
+    label = np.load("/media/files/yp/rbm/label03.npy")
+    train_label = label[:train_lenth]
+    valid_label = label[train_lenth:]
+    np.save("/media/files/yp/rbm/train_label03.npy", train_label)
+    np.save("/media/files/yp/rbm/valid_label03.npy", valid_label)
+
     print 'Dataset has generated successfully'
 else:
     print 'Can not match images size'
