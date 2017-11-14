@@ -4,7 +4,7 @@ import numpy as np
 
 # 将标签二值图像制作为npy格式的数据集
 
-img_path = '/media/files/yp/rbm/label03.png'
+img_path = '/media/files/yp/rbm/label05.png'
 img = cv2.imread(img_path)
 # cv2.imshow('img', img)
 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -20,4 +20,4 @@ for i in range(height):
             label.append(0)  # 没变化标签
         else:
             label.append(1)  # 变化了标签
-np.save("/media/files/yp/rbm/theano/label03.npy", label)
+np.save("/media/files/yp/rbm/theano/label05.npy", label)

@@ -4,8 +4,8 @@ import numpy as np
 
 # 利用5*5的滑块将图像做成npy格式的数据集
 
-img1_path = '/media/files/yp/rbm/1505.png'
-img2_path = '/media/files/yp/rbm/1605.png'
+img1_path = '/media/files/yp/rbm/1503.png'
+img2_path = '/media/files/yp/rbm/1603.png'
 img1 = cv2.imread(img1_path)
 img2 = cv2.imread(img2_path)
 # cv2.imshow('img', img)
@@ -51,13 +51,13 @@ if (height == height2) and (width == width2):
     train_lenth = int(len(content) * 0.7)
     # np.save("/media/files/yp/rbm/train03.npy", content[:train_lenth])
     # np.save("/media/files/yp/rbm/valid03.npy", content[train_lenth:])
-    np.save("/media/files/yp/rbm/dataset05.npy", content)
+    # np.save("/media/files/yp/rbm/dataset05.npy", content)
 
     label = np.load("/media/files/yp/rbm/label03.npy")
     train_label = label[:train_lenth]
     valid_label = label[train_lenth:]
-    # np.save("/media/files/yp/rbm/train_label03.npy", train_label)
-    # np.save("/media/files/yp/rbm/valid_label03.npy", valid_label)
+    np.save("/media/files/yp/rbm/theano/train_label03.npy", train_label)
+    np.save("/media/files/yp/rbm/theano/valid_label03.npy", valid_label)
 
     print 'Dataset has generated successfully'
 else:
