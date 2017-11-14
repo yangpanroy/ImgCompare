@@ -12,16 +12,16 @@ flags = tf.app.flags
 FLAGS = flags.FLAGS
 
 # 全局配置
-flags.DEFINE_string('dataset', 'mnist', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '', '训练集 .npy 文件的路径.')
-flags.DEFINE_string('train_labels', '', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '', '验证集 .npy 文件的路径.')
-flags.DEFINE_string('valid_labels', '', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '', '测试集 .npy 文件的路径.')
-flags.DEFINE_string('test_labels', '', '测试标签 .npy 文件的路径.')
+flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
+flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train03.npy', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label03.npy', '训练标签 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid03.npy', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label03.npy', '验证标签 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset05.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label05.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_string('name', 'dbn', '模型的名称.')
-flags.DEFINE_string('save_predictions', '', '保存模型预测结果的 .npy 文件的路径.')
+flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/predictions.npy', '保存模型预测结果的 .npy 文件的路径.')
 flags.DEFINE_string('save_layers_output_test', '', '保存模型各层对测试集输出的 .npy 文件的路径.')
 flags.DEFINE_string('save_layers_output_train', '', '保存模型各层对训练集输出的 .npy 文件的路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否预训练网络.')
@@ -29,7 +29,7 @@ flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）。 适用�
 flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # RBMs层具体参数
-flags.DEFINE_string('rbm_layers', '256,', 'Comma-separated values for the layers in the sdae.')
+flags.DEFINE_string('rbm_layers', '250,150,100', 'Comma-separated values for the layers in the sdae.')
 flags.DEFINE_boolean('rbm_gauss_visible', False, '是否将高斯单元用于可见层.')
 flags.DEFINE_float('rbm_stddev', 0.1, '高斯可见单元的标准差.')
 flags.DEFINE_string('rbm_learning_rate', '0.001,', '初始学习率.')

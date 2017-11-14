@@ -66,7 +66,7 @@ class DBN(object):
         # allocate symbolic variables for the data
         self.x = T.matrix('x')  # the data is presented as rasterized images
         self.y = T.ivector('y')  # the labels are presented as 1D vector
-                                 # of [int] labels
+        # of [int] labels
         # end-snippet-1
         # The DBN is an MLP, for which all weights of intermediate
         # layers are shared with a different RBM.  We will first
@@ -168,7 +168,6 @@ class DBN(object):
 
         pretrain_fns = []
         for rbm in self.rbm_layers:
-
             # get the cost and the updates list
             # using CD-k here (persisent=None) for training each RBM.
             # TODO: change cost function to reconstruction error
@@ -212,25 +211,25 @@ class DBN(object):
         (valid_set_x, valid_set_y) = datasets[1]
         # (test_set_x, test_set_y) = datasets[2]
 
-################
+        ################
         # 图片文件夹路径(file dir)
         # dire = sys.argv[1]
         dire = "/home/yp/PythonWorkspace/RBM/DBN_demo/modified_testdataset"
-        if dire[len(dire)-1]!='/':
+        if dire[len(dire) - 1] != '/':
             dire = dire + '/'
 
         # 遍历目录下的所有图片
 
-        label = [] # 标签数组
+        label = []  # 标签数组
         flag = 0
         # target 存测试集矩阵
         for item in os.listdir(dire):
             # 如果是文件且后缀名是.png
             if item.endswith('.png'):
                 # Read in the files
-                img = cv2.imread(dire+item) 
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # 转换为grayscle
-                img = img.reshape(1,784) # 变成1x784的矩阵
+                img = cv2.imread(dire + item)
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换为grayscle
+                img = img.reshape(1, 784)  # 变成1x784的矩阵
                 if flag == 0:
                     target = 255 - img
                     flag = 1
@@ -238,13 +237,12 @@ class DBN(object):
                     target = numpy.row_stack((target, 255 - img))
                 label.append(int(item[0]))
 
-        test_X_matrix = numpy.asarray(target,dtype = float)
-        test_set_x = theano.shared(test_X_matrix) #
-        
+        test_X_matrix = numpy.asarray(target, dtype=float)
+        test_set_x = theano.shared(test_X_matrix)  #
+
         test_Y_vector = numpy.asarray(label)
         shared_var_Y = theano.shared(test_Y_vector)
-        test_set_y = T.cast(shared_var_Y, 'int32') #
-
+        test_set_y = T.cast(shared_var_Y, 'int32')  #
 
         # # 看数据集是什么数据类型
         # fp = open('/Users/Brian/Desktop/test1.txt','w')
@@ -252,7 +250,7 @@ class DBN(object):
         # print >> fp, type(test_set_x)
         # #for t in test_set_y:
         # print >> fp, test_set_y.type
-################
+        ################
 
         # compute number of minibatches for training, validation and testing
         n_valid_batches = valid_set_x.get_value(borrow=True).shape[0]
@@ -276,11 +274,11 @@ class DBN(object):
             updates=updates,
             givens={
                 self.x: train_set_x[
-                    index * batch_size: (index + 1) * batch_size
-                ],
+                        index * batch_size: (index + 1) * batch_size
+                        ],
                 self.y: train_set_y[
-                    index * batch_size: (index + 1) * batch_size
-                ]
+                        index * batch_size: (index + 1) * batch_size
+                        ]
             }
         )
 
@@ -289,11 +287,11 @@ class DBN(object):
             self.errors,
             givens={
                 self.x: test_set_x[
-                    index * batch_size: (index + 1) * batch_size
-                ],
+                        index * batch_size: (index + 1) * batch_size
+                        ],
                 self.y: test_set_y[
-                    index * batch_size: (index + 1) * batch_size
-                ]
+                        index * batch_size: (index + 1) * batch_size
+                        ]
             }
         )
 
@@ -302,11 +300,11 @@ class DBN(object):
             self.errors,
             givens={
                 self.x: valid_set_x[
-                    index * batch_size: (index + 1) * batch_size
-                ],
+                        index * batch_size: (index + 1) * batch_size
+                        ],
                 self.y: valid_set_y[
-                    index * batch_size: (index + 1) * batch_size
-                ]
+                        index * batch_size: (index + 1) * batch_size
+                        ]
             }
         )
 
@@ -321,8 +319,8 @@ class DBN(object):
         return train_fn, valid_score, test_score
 
 
-def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
-             pretrain_lr=0.01, k=1, training_epochs=1000,
+def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
+             pretrain_lr=0.01, k=1, training_epochs=10,
              dataset='mnist.pkl.gz', batch_size=10):
     """
     Demonstrates how to train and test a Deep Belief Network.
@@ -354,21 +352,21 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     # 图片文件夹路径(file dir)
     # dire = sys.argv[1]
     dire = "/home/yp/PythonWorkspace/RBM/DBN_demo/modified_testdataset"
-    if dire[len(dire)-1]!='/':
+    if dire[len(dire) - 1] != '/':
         dire = dire + '/'
 
     # 遍历目录下的所有图片
 
-    label = [] # 标签数组
+    label = []  # 标签数组
     flag = 0
     # target 存测试集矩阵
     for item in os.listdir(dire):
         # 如果是文件且后缀名是.png
         if item.endswith('.png'):
             # Read in the files
-            img = cv2.imread(dire+item) 
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # 转换为grayscle
-            img = img.reshape(1,784) # 变成1x784的矩阵
+            img = cv2.imread(dire + item)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换为grayscle
+            img = img.reshape(1, 784)  # 变成1x784的矩阵
             if flag == 0:
                 target = 255 - img
                 flag = 1
@@ -376,12 +374,12 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
                 target = numpy.row_stack((target, 255 - img))
             label.append(int(item[0]))
 
-    test_X_matrix = numpy.asarray(target,dtype = float)
-    test_set_x = theano.shared(test_X_matrix) #
-    
+    test_X_matrix = numpy.asarray(target, dtype=float)
+    test_set_x = theano.shared(test_X_matrix)  #
+
     test_Y_vector = numpy.asarray(label)
     shared_var_Y = theano.shared(test_Y_vector)
-    test_set_y = T.cast(shared_var_Y, 'int32') #
+    test_set_y = T.cast(shared_var_Y, 'int32')  #
 
     # compute number of minibatches for training, validation and testing
     n_train_batches = train_set_x.get_value(borrow=True).shape[0] / batch_size
@@ -437,15 +435,15 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     print '... finetuning the model'
     # early-stopping parameters
     patience = 4 * n_train_batches  # look as this many examples regardless
-    patience_increase = 2.    # wait this much longer when a new best is
-                              # found
+    patience_increase = 2.  # wait this much longer when a new best is
+    # found
     improvement_threshold = 0.995  # a relative improvement of this much is
-                                   # considered significant
+    # considered significant
     validation_frequency = min(n_train_batches, patience / 2)
-                                  # go through this many
-                                  # minibatches before checking the network
-                                  # on the validation set; in this case we
-                                  # check every epoch
+    # go through this many
+    # minibatches before checking the network
+    # on the validation set; in this case we
+    # check every epoch
 
     best_validation_loss = numpy.inf
     test_score = 0.
@@ -478,10 +476,10 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
                 # if we got the best validation score until now
                 if this_validation_loss < best_validation_loss:
 
-                    #improve patience if loss improvement is good enough
+                    # improve patience if loss improvement is good enough
                     if (
-                        this_validation_loss < best_validation_loss *
-                        improvement_threshold
+                                this_validation_loss < best_validation_loss *
+                                improvement_threshold
                     ):
                         patience = max(patience, iter * patience_increase)
 
@@ -516,6 +514,6 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
 
 
 if __name__ == '__main__':
-    test_DBN(finetune_lr=0.1, pretraining_epochs=1,#10,
-             pretrain_lr=0.01, k=1, training_epochs=1,#10,
+    test_DBN(finetune_lr=0.1, pretraining_epochs=10,  # 10,
+             pretrain_lr=0.01, k=1, training_epochs=10,  # 10,
              dataset='mnist.pkl.gz', batch_size=10)

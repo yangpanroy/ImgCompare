@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 
-# 利用3*3的滑块将图像做成npy格式的数据集
+# 利用5*5的滑块将图像做成npy格式的数据集
 
 img1_path = '/media/files/yp/rbm/1505.png'
 img2_path = '/media/files/yp/rbm/1605.png'
