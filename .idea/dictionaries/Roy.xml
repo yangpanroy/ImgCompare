@@ -1,10 +1,16 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Roy">
     <words>
+      <w>cifar</w>
       <w>dataset</w>
       <w>finetune</w>
+      <w>minibatch</w>
+      <w>mnist</w>
       <w>pretrain</w>
       <w>pretraining</w>
+      <w>regcoef</w>
+      <w>softmax</w>
+      <w>tanh</w>
     </words>
   </dictionary>
 </component>

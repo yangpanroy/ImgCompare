@@ -29,7 +29,7 @@ flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）。 适用�
 flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # RBMs层具体参数
-flags.DEFINE_string('rbm_layers', '250,150,100', 'Comma-separated values for the layers in the sdae.')
+flags.DEFINE_string('rbm_layers', '250,150,100', '将每层的节点数用逗号分隔开.')
 flags.DEFINE_boolean('rbm_gauss_visible', False, '是否将高斯单元用于可见层.')
 flags.DEFINE_float('rbm_stddev', 0.1, '高斯可见单元的标准差.')
 flags.DEFINE_string('rbm_learning_rate', '0.001,', '初始学习率.')

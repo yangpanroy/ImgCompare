@@ -51,9 +51,9 @@ if (height == height2) and (width == width2):
     train_lenth = int(len(content) * 0.7)
     # np.save("/media/files/yp/rbm/train03.npy", content[:train_lenth])
     # np.save("/media/files/yp/rbm/valid03.npy", content[train_lenth:])
-    # np.save("/media/files/yp/rbm/dataset05.npy", content)
+    np.save("/media/files/yp/rbm/dataset03.npy", content)
 
-    label = np.load("/media/files/yp/rbm/label03.npy")
+    label = np.load("/media/files/yp/rbm/theano/label03.npy")
     train_label = label[:train_lenth]
     valid_label = label[train_lenth:]
     np.save("/media/files/yp/rbm/theano/train_label03.npy", train_label)

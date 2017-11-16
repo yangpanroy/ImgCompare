@@ -188,7 +188,7 @@ class DBN(object):
 
         return pretrain_fns
 
-    def build_finetune_functions(self, datasets, batch_size, learning_rate):
+    def build_finetune_functions(self, batch_size, learning_rate):
         '''Generates a function `train` that implements one step of
         finetuning, a function `validate` that computes the error on a
         batch from the validation set, and a function `test` that
@@ -207,49 +207,45 @@ class DBN(object):
 
         '''
 
-        (train_set_x, train_set_y) = datasets[0]
-        (valid_set_x, valid_set_y) = datasets[1]
-        # (test_set_x, test_set_y) = datasets[2]
+        train_dataset_path = "/media/files/yp/rbm/train03.npy"
+        valid_dataset_path = "/media/files/yp/rbm/valid03.npy"
+        test_dataset_path = "/media/files/yp/rbm/dataset03.npy"
 
-        ################
-        # 图片文件夹路径(file dir)
-        # dire = sys.argv[1]
-        dire = "/home/yp/PythonWorkspace/RBM/DBN_demo/modified_testdataset"
-        if dire[len(dire) - 1] != '/':
-            dire = dire + '/'
+        train_label_path = "/media/files/yp/rbm/theano/train_label03.npy"
+        valid_label_path = "/media/files/yp/rbm/theano/valid_label03.npy"
+        test_label_path = "/media/files/yp/rbm/theano/label03.npy"
 
-        # 遍历目录下的所有图片
+        train_dataset = numpy.load(train_dataset_path)
+        valid_dataset = numpy.load(valid_dataset_path)
+        test_dataset = numpy.load(test_dataset_path)
 
-        label = []  # 标签数组
-        flag = 0
-        # target 存测试集矩阵
-        for item in os.listdir(dire):
-            # 如果是文件且后缀名是.png
-            if item.endswith('.png'):
-                # Read in the files
-                img = cv2.imread(dire + item)
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换为grayscle
-                img = img.reshape(1, 784)  # 变成1x784的矩阵
-                if flag == 0:
-                    target = 255 - img
-                    flag = 1
-                else:
-                    target = numpy.row_stack((target, 255 - img))
-                label.append(int(item[0]))
+        train_label = numpy.load(train_label_path)
+        valid_label = numpy.load(valid_label_path)
+        test_label = numpy.load(test_label_path)
 
-        test_X_matrix = numpy.asarray(target, dtype=float)
-        test_set_x = theano.shared(test_X_matrix)  #
+        train_X_matrix = numpy.asarray(train_dataset, dtype=float)
+        train_set_x = theano.shared(train_X_matrix)  # 训练集数据
+        train_Y_vector = numpy.asarray(train_label)
+        shared_train_Y = theano.shared(train_Y_vector)
+        train_set_y = T.cast(shared_train_Y, 'int32')  # 训练集标签
 
-        test_Y_vector = numpy.asarray(label)
-        shared_var_Y = theano.shared(test_Y_vector)
-        test_set_y = T.cast(shared_var_Y, 'int32')  #
+        valid_X_matrix = numpy.asarray(valid_dataset, dtype=float)
+        valid_set_x = theano.shared(valid_X_matrix)  # 验证集数据
+        valid_Y_vector = numpy.asarray(valid_label)
+        shared_valid_Y = theano.shared(valid_Y_vector)
+        valid_set_y = T.cast(shared_valid_Y, 'int32')  # 验证集标签
 
-        # # 看数据集是什么数据类型
-        # fp = open('/Users/Brian/Desktop/test1.txt','w')
-        # #for t in test_set_x:
-        # print >> fp, type(test_set_x)
-        # #for t in test_set_y:
-        # print >> fp, test_set_y.type
+        test_X_matrix = numpy.asarray(test_dataset, dtype=float)
+        test_set_x = theano.shared(test_X_matrix)  # 测试集数据
+        test_Y_vector = numpy.asarray(test_label)
+        shared_test_Y = theano.shared(test_Y_vector)
+        test_set_y = T.cast(shared_test_Y, 'int32')  # 测试集标签
+
+        # train = [train_set_x, train_set_y]
+        # valid = [valid_set_x, valid_set_y]
+        # test = [test_set_x, test_set_y]
+        #
+        # dataset = [train, valid, test]
         ################
 
         # compute number of minibatches for training, validation and testing
@@ -345,11 +341,11 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
 
     train_dataset_path = "/media/files/yp/rbm/train03.npy"
     valid_dataset_path = "/media/files/yp/rbm/valid03.npy"
-    test_dataset_path = "/media/files/yp/rbm/dataset05.npy"
+    test_dataset_path = "/media/files/yp/rbm/dataset03.npy"
 
     train_label_path = "/media/files/yp/rbm/theano/train_label03.npy"
     valid_label_path = "/media/files/yp/rbm/theano/valid_label03.npy"
-    test_label_path = "/media/files/yp/rbm/theano/label05.npy"
+    test_label_path = "/media/files/yp/rbm/theano/label03.npy"
 
     train_dataset = numpy.load(train_dataset_path)
     valid_dataset = numpy.load(valid_dataset_path)
@@ -391,7 +387,7 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
     print '... building the model'
     # construct the Deep Belief Network
     dbn = DBN(numpy_rng=numpy_rng, n_ins=25 * 2,
-              hidden_layers_sizes=[250, 150, 100],
+              hidden_layers_sizes=[100, 50, 25],
               n_outs=2)
 
     # start-snippet-2
@@ -429,7 +425,6 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
     # get the training, validation and testing function for the model
     print '... getting the finetuning functions'
     train_fn, validate_model, test_model = dbn.build_finetune_functions(
-        datasets=datasets,
         batch_size=batch_size,
         learning_rate=finetune_lr
     )
