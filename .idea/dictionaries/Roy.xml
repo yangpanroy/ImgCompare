@@ -2,13 +2,16 @@
   <dictionary name="Roy">
     <words>
       <w>cifar</w>
+      <w>cuda</w>
       <w>dataset</w>
       <w>finetune</w>
+      <w>finetuning</w>
       <w>minibatch</w>
       <w>mnist</w>
       <w>pretrain</w>
       <w>pretraining</w>
       <w>regcoef</w>
+      <w>sdae</w>
       <w>softmax</w>
       <w>tanh</w>
     </words>

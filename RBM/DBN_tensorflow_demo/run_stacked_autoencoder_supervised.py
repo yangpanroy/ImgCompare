@@ -1,9 +1,12 @@
 # coding=utf-8
 import numpy as np
 import tensorflow as tf
+import os
 
 from yadlt.models.autoencoders import stacked_denoising_autoencoder
 from yadlt.utils import datasets, utilities
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'   # 指定第二块GPU可用
 
 # #################### #
 #   Flags definition   #
@@ -21,8 +24,9 @@ flags.DEFINE_string('test_dataset', '', '测试集 .npy 文件的路径.')
 flags.DEFINE_string('test_labels', '', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
-flags.DEFINE_string('save_predictions', '', '保存模型预测结果的 .npy 文件的路径.')
-flags.DEFINE_string('save_layers_output_test', '', '保存模型各层对测试集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions.npy', '保存模型预测结果的 .npy '
+                                                                                                  '文件的路径.')
+flags.DEFINE_string('save_layers_output_test', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对测试集输出的 .npy 文件的路径.')
 flags.DEFINE_string('save_layers_output_train', '', '保存模型各层对训练集输出的 .npy 文件的路径.')
 flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）. 适用于测试超参数.')
 flags.DEFINE_string('name', 'sdae', '模型的名称.')
@@ -49,7 +53,7 @@ flags.DEFINE_string('dae_batch_size', '10,', '每个 mini-batch 的大小.')
 flags.DEFINE_string('dae_corr_type', 'none,', '输入干扰的类型. ["none", "masking", "salt_and_pepper"]')
 flags.DEFINE_string('dae_corr_frac', '0.0,', '输入干扰的占比.')
 
-# Conversion of Autoencoder layers parameters from string to their specific type
+# 将自动编码器层参数从字符串转换为其特定类型
 dae_layers = utilities.flag_to_list(FLAGS.dae_layers, 'int')
 dae_enc_act_func = utilities.flag_to_list(FLAGS.dae_enc_act_func, 'str')
 dae_dec_act_func = utilities.flag_to_list(FLAGS.dae_dec_act_func, 'str')
@@ -62,7 +66,7 @@ dae_corr_frac = utilities.flag_to_list(FLAGS.dae_corr_frac, 'float')
 dae_num_epochs = utilities.flag_to_list(FLAGS.dae_num_epochs, 'int')
 dae_batch_size = utilities.flag_to_list(FLAGS.dae_batch_size, 'int')
 
-# Parameters validation
+# 检查参数
 assert all([0. <= cf <= 1. for cf in dae_corr_frac])
 assert all([ct in ['masking', 'salt_and_pepper', 'none'] for ct in dae_corr_type])
 assert FLAGS.dataset in ['mnist', 'cifar10', 'custom']
@@ -105,6 +109,7 @@ if __name__ == '__main__':
             else:
                 return None
 
+
         trX, trY = load_from_np(FLAGS.train_dataset), load_from_np(FLAGS.train_labels)
         vlX, vlY = load_from_np(FLAGS.valid_dataset), load_from_np(FLAGS.valid_labels)
         teX, teY = load_from_np(FLAGS.test_dataset), load_from_np(FLAGS.test_labels)
@@ -117,7 +122,7 @@ if __name__ == '__main__':
         teX = None
         teY = None
 
-    # Create the object
+    # 创建编码、解码、微调函数和网络模型对象
     sdae = None
 
     dae_enc_act_func = [utilities.str2actfunc(af) for af in dae_enc_act_func]
@@ -137,20 +142,21 @@ if __name__ == '__main__':
         num_epochs=dae_num_epochs, batch_size=dae_batch_size,
         finetune_act_func=finetune_act_func)
 
-    # Fit the model (unsupervised pretraining)
+    # 训练模型 (无监督预训练)
     if FLAGS.do_pretrain:
         encoded_X, encoded_vX = sdae.pretrain(trX, vlX)
 
-    # Supervised finetuning
+    # 有监督微调
     sdae.fit(trX, trY, vlX, vlY)
 
-    # Compute the accuracy of the model
+    # 计算模型在测试集上的准确率
     print('Test set accuracy: {}'.format(sdae.score(teX, teY)))
 
-    # Save the predictions of the model
+    # 保存模型的预测
     if FLAGS.save_predictions:
         print('Saving the predictions for the test set...')
         np.save(FLAGS.save_predictions, sdae.predict(teX))
+
 
     def save_layers_output(which_set):
         if which_set == 'train':
@@ -163,12 +169,12 @@ if __name__ == '__main__':
             for i, o in enumerate(teout):
                 np.save(FLAGS.save_layers_output_test + '-layer-' + str(i + 1) + '-test', o)
 
-    # Save output from each layer of the model
+    # 保存模型每一层对测试集的输出
     if FLAGS.save_layers_output_test:
         print('Saving the output of each layer for the test set')
         save_layers_output('test')
 
-    # Save output from each layer of the model
+    # 保存模型每一层对训练集的输出
     if FLAGS.save_layers_output_train:
         print('Saving the output of each layer for the train set')
         save_layers_output('train')
