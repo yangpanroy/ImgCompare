@@ -16,10 +16,10 @@ FLAGS = flags.FLAGS
 
 # 全局配置
 flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train03.npy', '训练集 .npy 文件的路径.')
-flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label03.npy', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid03.npy', '验证集 .npy 文件的路径.')
-flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label03.npy', '验证标签 .npy 文件的路径.')
+flags.DEFINE_string('train_dataset', '', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_labels', '', '训练标签 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_labels', '', '验证标签 .npy 文件的路径.')
 flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset05.npy', '测试集 .npy 文件的路径.')
 flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label05.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
