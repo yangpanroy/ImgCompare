@@ -12,10 +12,10 @@ for i in range(length):
         predictions_label.append(0)
 predictions_label = np.array(predictions_label)
 print 'read file done'
-img_path = '/media/files/yp/rbm/label05.png'
+img_path = '/media/files/yp/rbm/label07.png'
 img = cv2.imread(img_path)
 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 height, width = np.shape(img_gray)
 predictions_img = predictions_label.reshape(height, width)
 # cv2.imshow('predictions_img', predictions_img)
-cv2.imwrite('/media/files/yp/rbm/label05_predictions_img.jpg', predictions_img)
+cv2.imwrite('/media/files/yp/rbm/label07_predictions_img.jpg', predictions_img)

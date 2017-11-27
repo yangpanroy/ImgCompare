@@ -20,8 +20,8 @@ flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train03.npy', '训练�
 flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label03.npy', '训练标签 .npy 文件的路径.')
 flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid03.npy', '验证集 .npy 文件的路径.')
 flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label03.npy', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset05.npy', '测试集 .npy 文件的路径.')
-flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label05.npy', '测试标签 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset07.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label07.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
 flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions.npy', '保存模型预测结果的 .npy '

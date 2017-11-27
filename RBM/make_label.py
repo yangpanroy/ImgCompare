@@ -4,7 +4,7 @@ import numpy as np
 
 # 将标签二值图像制作为npy格式的数据集
 
-img_path = '/media/files/yp/rbm/label05.png'
+img_path = '/media/files/yp/rbm/label07.png'
 img = cv2.imread(img_path)
 # cv2.imshow('img', img)
 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -28,4 +28,4 @@ index = [i for i, a in enumerate(label) if a == [1, 0]]
 # accuracy = float(count)/(height*width)
 # print accuracy
 # print 1-accuracy
-np.save("/media/files/yp/rbm/label05.npy", label)
+np.save("/media/files/yp/rbm/label07.npy", label)

@@ -16,12 +16,12 @@ FLAGS = flags.FLAGS
 
 # 全局配置
 flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '', '训练集 .npy 文件的路径.')
-flags.DEFINE_string('train_labels', '', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '', '验证集 .npy 文件的路径.')
-flags.DEFINE_string('valid_labels', '', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset05.npy', '测试集 .npy 文件的路径.')
-flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label05.npy', '测试标签 .npy 文件的路径.')
+flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train03.npy', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label03.npy', '训练标签 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid03.npy', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label03.npy', '验证标签 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset06.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label06.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
 flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions.npy', '保存模型预测结果的 .npy '
@@ -34,7 +34,7 @@ flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # 有监督的微调的参数
 flags.DEFINE_string('finetune_loss_func', 'softmax_cross_entropy', '损失函数. ["softmax_cross_entropy", "mse"]')
-flags.DEFINE_integer('finetune_num_epochs', 30, ' epochs 数量.')
+flags.DEFINE_integer('finetune_num_epochs', 0, ' epochs 数量.')
 flags.DEFINE_float('finetune_learning_rate', 0.001, '学习率')
 flags.DEFINE_string('finetune_act_func', 'relu', '激活函数. ["sigmoid, "tanh", "relu"]')
 flags.DEFINE_float('finetune_dropout', 1, 'Dropout 参数.')
@@ -48,7 +48,7 @@ flags.DEFINE_string('dae_dec_act_func', 'none,', '解码器的激活函数. ["si
 flags.DEFINE_string('dae_loss_func', 'mse,', '损失函数. ["mse" or "cross_entropy"]')
 flags.DEFINE_string('dae_opt', 'sgd,', '优化器["sgd", "ada_grad", "momentum", "adam"]')
 flags.DEFINE_string('dae_learning_rate', '0.01,', '初试学习率.')
-flags.DEFINE_string('dae_num_epochs', '10,', ' epochs 数量.')
+flags.DEFINE_string('dae_num_epochs', '0,', ' epochs 数量.')
 flags.DEFINE_string('dae_batch_size', '10,', '每个 mini-batch 的大小.')
 flags.DEFINE_string('dae_corr_type', 'none,', '输入干扰的类型. ["none", "masking", "salt_and_pepper"]')
 flags.DEFINE_string('dae_corr_frac', '0.0,', '输入干扰的占比.')

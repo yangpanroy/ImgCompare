@@ -4,8 +4,8 @@ import numpy as np
 
 # 利用3*3的滑块将图像做成npy格式的数据集
 
-img1_path = '/media/files/yp/rbm/1505.png'
-img2_path = '/media/files/yp/rbm/1605.png'
+img1_path = '/media/files/yp/rbm/1506.png'
+img2_path = '/media/files/yp/rbm/1606.png'
 img1 = cv2.imread(img1_path)
 img2 = cv2.imread(img2_path)
 # cv2.imshow('img', img)
@@ -51,15 +51,15 @@ if (height == height2) and (width == width2):
                  img2_expand[i + 2][j + 2]
                  ])
     train_lenth = int(len(content) * 0.7)
-    np.save("/media/files/yp/rbm/train05.npy", content[:train_lenth])
-    np.save("/media/files/yp/rbm/valid05.npy", content[train_lenth:])
-    np.save("/media/files/yp/rbm/dataset05.npy", content)
+    np.save("/media/files/yp/rbm/train06.npy", content[:train_lenth])
+    np.save("/media/files/yp/rbm/valid06.npy", content[train_lenth:])
+    np.save("/media/files/yp/rbm/dataset06.npy", content)
 
-    label = np.load("/media/files/yp/rbm/label05.npy")
+    label = np.load("/media/files/yp/rbm/label06.npy")
     train_label = label[:train_lenth]
     valid_label = label[train_lenth:]
-    np.save("/media/files/yp/rbm/train_label05.npy", train_label)
-    np.save("/media/files/yp/rbm/valid_label05.npy", valid_label)
+    np.save("/media/files/yp/rbm/train_label06.npy", train_label)
+    np.save("/media/files/yp/rbm/valid_label06.npy", valid_label)
 
     print 'Dataset has generated successfully'
 else:
