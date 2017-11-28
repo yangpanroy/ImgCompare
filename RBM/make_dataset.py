@@ -2,15 +2,20 @@
 import cv2
 import numpy as np
 
-# 利用3*3的滑块将图像做成npy格式的数据集
+# 利用5*5的滑块将图像做成npy格式的数据集
 
-img1_path = '/media/files/yp/rbm/1506.png'
-img2_path = '/media/files/yp/rbm/1606.png'
+img1_path = '/media/files/yp/rbm/1508.png'
+img2_path = '/media/files/yp/rbm/1608.png'
 img1 = cv2.imread(img1_path)
 img2 = cv2.imread(img2_path)
 # cv2.imshow('img', img)
-img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+# img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+# img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+# 分离通道 0：B 1：G 2：R
+img1_gray = cv2.split(img1)[2]
+img2_gray = cv2.split(img2)[2]
+
 # ret1, thresh1 = cv2.threshold(img1_gray, 127, 255, cv2.THRESH_BINARY)
 # ret2, thresh2 = cv2.threshold(img2_gray, 127, 255, cv2.THRESH_BINARY)
 height, width = np.shape(img1_gray)
@@ -51,15 +56,15 @@ if (height == height2) and (width == width2):
                  img2_expand[i + 2][j + 2]
                  ])
     train_lenth = int(len(content) * 0.7)
-    np.save("/media/files/yp/rbm/train06.npy", content[:train_lenth])
-    np.save("/media/files/yp/rbm/valid06.npy", content[train_lenth:])
-    np.save("/media/files/yp/rbm/dataset06.npy", content)
+    # np.save("/media/files/yp/rbm/train09_B.npy", content[:train_lenth])
+    # np.save("/media/files/yp/rbm/valid09_B.npy", content[train_lenth:])
+    np.save("/media/files/yp/rbm/dataset08_R.npy", content)
 
-    label = np.load("/media/files/yp/rbm/label06.npy")
-    train_label = label[:train_lenth]
-    valid_label = label[train_lenth:]
-    np.save("/media/files/yp/rbm/train_label06.npy", train_label)
-    np.save("/media/files/yp/rbm/valid_label06.npy", valid_label)
+    # label = np.load("/media/files/yp/rbm/label09.npy")
+    # train_label = label[:train_lenth]
+    # valid_label = label[train_lenth:]
+    # np.save("/media/files/yp/rbm/train_label09.npy", train_label)
+    # np.save("/media/files/yp/rbm/valid_label09.npy", valid_label)
 
     print 'Dataset has generated successfully'
 else:

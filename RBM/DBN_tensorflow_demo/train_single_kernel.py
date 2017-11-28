@@ -16,20 +16,20 @@ FLAGS = flags.FLAGS
 
 # 全局配置
 flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train09_R.npy', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train09_B.npy', '训练集 .npy 文件的路径.')
 flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label09.npy', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid09_R.npy', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid09_B.npy', '验证集 .npy 文件的路径.')
 flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label09.npy', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset08_R.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset08_B.npy', '测试集 .npy 文件的路径.')
 flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label08.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
-flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions08_R.npy', '保存模型预测结果的 .npy '
+flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions08_B.npy', '保存模型预测结果的 .npy '
                                                                                                   '文件的路径.')
-flags.DEFINE_string('save_layers_output_test', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对测试集输出的 .npy 文件的路径.')
-flags.DEFINE_string('save_layers_output_train', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对训练集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_test', '', '保存模型各层对测试集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_train', '', '保存模型各层对训练集输出的 .npy 文件的路径.')
 flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）. 适用于测试超参数.')
-flags.DEFINE_string('name', 'sdae_R', '模型的名称.')
+flags.DEFINE_string('name', 'sdae_G', '模型的名称.')
 flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # 有监督的微调的参数
