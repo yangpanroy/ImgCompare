@@ -6,7 +6,7 @@ import os
 from yadlt.models.autoencoders import stacked_denoising_autoencoder
 from yadlt.utils import datasets, utilities
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'   # 指定第二块GPU可用
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'   # 指定第二块GPU可
 
 # #################### #
 #   Flags definition   #
@@ -16,20 +16,20 @@ FLAGS = flags.FLAGS
 
 # 全局配置
 flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train09_R.npy', '训练集 .npy 文件的路径.')
-flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label09.npy', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid09_R.npy', '验证集 .npy 文件的路径.')
-flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label09.npy', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset08_R.npy', '测试集 .npy 文件的路径.')
-flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label08.npy', '测试标签 .npy 文件的路径.')
+flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/dataset/train11ms_RGB.npy', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_labels', '/media/files/yp/rbm/label/binary/train_11ms.npy', '训练标签 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/dataset/valid11ms_RGB.npy', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/label/binary/valid_11ms.npy', '验证标签 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset/test02_3x3/test02_0_RGB.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label/binary/label02_0.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
-flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions08_R.npy', '保存模型预测结果的 .npy '
+flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions02.npy', '保存模型预测结果的 .npy '
                                                                                                   '文件的路径.')
-flags.DEFINE_string('save_layers_output_test', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对测试集输出的 .npy 文件的路径.')
-flags.DEFINE_string('save_layers_output_train', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对训练集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_test', '', '保存模型各层对测试集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_train', '', '保存模型各层对训练集输出的 .npy 文件的路径.')
 flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）. 适用于测试超参数.')
-flags.DEFINE_string('name', 'sdae_R', '模型的名称.')
+flags.DEFINE_string('name', 'change_detection_sdae_ms', '模型的名称.')
 flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # 有监督的微调的参数
@@ -149,13 +149,13 @@ if __name__ == '__main__':
     # 有监督微调
     sdae.fit(trX, trY, vlX, vlY)
 
-    # 计算模型在测试集上的准确率
-    print('Test set accuracy: {}'.format(sdae.score(teX, teY)))
-
-    # 保存模型的预测
-    if FLAGS.save_predictions:
-        print('Saving the predictions for the test set...')
-        np.save(FLAGS.save_predictions, sdae.predict(teX))
+    # # 计算模型在测试集上的准确率
+    # print('Test set accuracy: {}'.format(sdae.score(teX, teY)))
+    #
+    # # 保存模型的预测
+    # if FLAGS.save_predictions:
+    #     print('Saving the predictions for the test set...')
+    #     np.save(FLAGS.save_predictions, sdae.predict(teX))
 
 
     def save_layers_output(which_set):

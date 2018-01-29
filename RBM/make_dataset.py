@@ -4,68 +4,73 @@ import numpy as np
 
 # 利用5*5的滑块将图像做成npy格式的数据集
 
-img1_path = '/media/files/yp/rbm/1508.png'
-img2_path = '/media/files/yp/rbm/1608.png'
+img1_path = '/media/files/yp/rbm/pic_div/2015/0.png'
+img2_path = '/media/files/yp/rbm/pic_div/2016/0.png'
 img1 = cv2.imread(img1_path)
 img2 = cv2.imread(img2_path)
-# cv2.imshow('img', img)
+# 是否分割标签 TODO 执行代码前更改 FLAG 和 路径
+SPLIT_LABEL = 0
+label_path = "/media/files/yp/rbm/pic_div/label/0.npy"
+train_label_path = "/media/files/yp/rbm/label/binary/train_11ms.npy"
+valid_label_path = "/media/files/yp/rbm/label/binary/valid_11ms.npy"
+# 是否分割数据 TODO 执行代码前更改 FLAG 和 路径
+SPLIT_DATA = 0
+for dim in range(3):
+    # 分离通道 0：B 1：G 2：R
+    img1_gray = cv2.split(img1)[dim]
+    img2_gray = cv2.split(img2)[dim]
 
-# img1_gray = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-# img2_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-# 分离通道 0：B 1：G 2：R
-img1_gray = cv2.split(img1)[2]
-img2_gray = cv2.split(img2)[2]
+    height, width = np.shape(img1_gray)
+    height2, width2 = np.shape(img2_gray)
+    kernel_width = 5  # 定义滑块的边长
+    t = kernel_width - 1
 
-# ret1, thresh1 = cv2.threshold(img1_gray, 127, 255, cv2.THRESH_BINARY)
-# ret2, thresh2 = cv2.threshold(img2_gray, 127, 255, cv2.THRESH_BINARY)
-height, width = np.shape(img1_gray)
-height2, width2 = np.shape(img2_gray)
-kernel_width = 5  # 定义滑块的边长
-t = kernel_width - 1
+    if (height == height2) and (width == width2):
+        img1_expand = np.zeros([height + t, width + t])
+        img2_expand = np.zeros([height + t, width + t])
+        for i in range(height):
+            for j in range(width):
+                img1_expand[i + t / 2][j + t / 2] = img1_gray[i][j] / 255.0
+                img2_expand[i + t / 2][j + t / 2] = img2_gray[i][j] / 255.0
+        content = []
+        for i in range(t / 2, height + t / 2):
+            for j in range(t / 2, width + t / 2):
+                content.append(
+                    [
+                        img1_expand[i - 2][j - 2], img1_expand[i - 2][j - 1], img1_expand[i - 2][j], img1_expand[i - 2][j + 1], img1_expand[i - 2][j + 2],
+                        img1_expand[i - 1][j - 2], img1_expand[i - 1][j - 1], img1_expand[i - 1][j], img1_expand[i - 1][j + 1], img1_expand[i - 1][j + 2],
+                        img1_expand[i][j - 2], img1_expand[i][j - 1], img1_expand[i][j], img1_expand[i][j + 1], img1_expand[i][j + 2],
+                        img1_expand[i + 1][j - 2], img1_expand[i + 1][j - 1], img1_expand[i + 1][j], img1_expand[i + 1][j + 1], img1_expand[i + 1][j + 2],
+                        img1_expand[i + 2][j - 2], img1_expand[i + 2][j - 1], img1_expand[i + 2][j], img1_expand[i + 2][j + 1], img1_expand[i + 2][j + 2],
+                        img2_expand[i - 2][j - 2], img2_expand[i - 2][j - 1], img2_expand[i - 2][j], img2_expand[i - 2][j + 1], img2_expand[i - 2][j + 2],
+                        img2_expand[i - 1][j - 2], img2_expand[i - 1][j - 1], img2_expand[i - 1][j], img2_expand[i - 1][j + 1], img2_expand[i - 1][j + 2],
+                        img2_expand[i][j - 2], img2_expand[i][j - 1], img2_expand[i][j], img2_expand[i][j + 1], img2_expand[i][j + 2],
+                        img2_expand[i + 1][j - 2], img2_expand[i + 1][j - 1], img2_expand[i + 1][j], img2_expand[i + 1][j + 1], img2_expand[i + 1][j + 2],
+                        img2_expand[i + 2][j - 2], img2_expand[i + 2][j - 1], img2_expand[i + 2][j], img2_expand[i + 2][j + 1], img2_expand[i + 2][j + 2]
+                    ])
+        train_lenth = int(len(content) * 0.7)
 
-if (height == height2) and (width == width2):
-    img1_expand = np.zeros([height + t, width + t])
-    img2_expand = np.zeros([height + t, width + t])
-    for i in range(height):
-        for j in range(width):
-            img1_expand[i + t / 2][j + t / 2] = img1_gray[i][j]/255.0
-            img2_expand[i + t / 2][j + t / 2] = img2_gray[i][j]/255.0
-    content = []
-    for i in range(t / 2, height + t / 2):
-        for j in range(t / 2, width + t / 2):
-            content.append(
-                [img1_expand[i - 2][j - 2], img1_expand[i - 2][j - 1], img1_expand[i - 2][j], img1_expand[i - 2][j + 1],
-                 img1_expand[i - 2][j + 2],
-                 img1_expand[i - 1][j - 2], img1_expand[i - 1][j - 1], img1_expand[i - 1][j], img1_expand[i - 1][j + 1],
-                 img1_expand[i - 1][j + 2],
-                 img1_expand[i][j - 2], img1_expand[i][j - 1], img1_expand[i][j], img1_expand[i][j + 1],
-                 img1_expand[i][j + 2],
-                 img1_expand[i + 1][j - 2], img1_expand[i + 1][j - 1], img1_expand[i + 1][j], img1_expand[i + 1][j + 1],
-                 img1_expand[i + 1][j + 2],
-                 img1_expand[i + 2][j - 2], img1_expand[i + 2][j - 1], img1_expand[i + 2][j], img1_expand[i + 2][j + 1],
-                 img1_expand[i + 2][j + 2],
-                 img2_expand[i - 2][j - 2], img2_expand[i - 2][j - 1], img2_expand[i - 2][j], img2_expand[i - 2][j + 1],
-                 img2_expand[i - 2][j + 2],
-                 img2_expand[i - 1][j - 2], img2_expand[i - 1][j - 1], img2_expand[i - 1][j], img2_expand[i - 1][j + 1],
-                 img2_expand[i - 1][j + 2],
-                 img2_expand[i][j - 2], img2_expand[i][j - 1], img2_expand[i][j], img2_expand[i][j + 1],
-                 img2_expand[i][j + 2],
-                 img2_expand[i + 1][j - 2], img2_expand[i + 1][j - 1], img2_expand[i + 1][j], img2_expand[i + 1][j + 1],
-                 img2_expand[i + 1][j + 2],
-                 img2_expand[i + 2][j - 2], img2_expand[i + 2][j - 1], img2_expand[i + 2][j], img2_expand[i + 2][j + 1],
-                 img2_expand[i + 2][j + 2]
-                 ])
-    train_lenth = int(len(content) * 0.7)
-    # np.save("/media/files/yp/rbm/train09_B.npy", content[:train_lenth])
-    # np.save("/media/files/yp/rbm/valid09_B.npy", content[train_lenth:])
-    np.save("/media/files/yp/rbm/dataset08_R.npy", content)
+        if dim == 0:
+            dim_name = 'B'
+        if dim == 1:
+            dim_name = 'G'
+        if dim == 2:
+            dim_name = 'R'
 
-    # label = np.load("/media/files/yp/rbm/label09.npy")
-    # train_label = label[:train_lenth]
-    # valid_label = label[train_lenth:]
-    # np.save("/media/files/yp/rbm/train_label09.npy", train_label)
-    # np.save("/media/files/yp/rbm/valid_label09.npy", valid_label)
+        if SPLIT_DATA == 1:
+            np.save("/media/files/yp/rbm/dataset/train11_" + dim_name + ".npy", content[:train_lenth])
+            np.save("/media/files/yp/rbm/dataset/valid11_" + dim_name + ".npy", content[train_lenth:])
+        else:
+            np.save("/media/files/yp/rbm/pic_div/dataset/test0_" + dim_name + ".npy", content)
 
-    print 'Dataset has generated successfully'
-else:
-    print 'Can not match images size'
+        if SPLIT_LABEL == 1:
+            label = np.load(label_path)
+            train_label = label[:train_lenth]
+            valid_label = label[train_lenth:]
+            np.save(train_label_path, train_label)
+            np.save(valid_label_path, valid_label)
+            SPLIT_LABEL = 0
+
+        print 'Dataset has generated successfully'
+    else:
+        print 'Can not match images size'

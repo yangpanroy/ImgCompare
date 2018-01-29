@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="3c32bf3b-9686-4d96-b2db-a64adbb638e8" name="www" url="http://xcwill.asuscomm.com">
+        <fileTransfer host="xcwill.asuscomm.com" port="6168" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="6168" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

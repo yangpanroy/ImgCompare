@@ -6,7 +6,7 @@ import os
 from yadlt.models.autoencoders import stacked_denoising_autoencoder
 from yadlt.utils import datasets, utilities
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'   # 指定第二块GPU可用
+os.environ["CUDA_VISIBLE_DEVICES"] = '2'   # 指定第二块GPU可
 
 # #################### #
 #   Flags definition   #
@@ -16,20 +16,19 @@ FLAGS = flags.FLAGS
 
 # 全局配置
 flags.DEFINE_string('dataset', 'custom', '用哪个数据集. ["mnist", "cifar10", "custom"]')
-flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/train03.npy', '训练集 .npy 文件的路径.')
-flags.DEFINE_string('train_labels', '/media/files/yp/rbm/train_label03.npy', '训练标签 .npy 文件的路径.')
-flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/valid03.npy', '验证集 .npy 文件的路径.')
-flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/valid_label03.npy', '验证标签 .npy 文件的路径.')
-flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/dataset06.npy', '测试集 .npy 文件的路径.')
-flags.DEFINE_string('test_labels', '/media/files/yp/rbm/label06.npy', '测试标签 .npy 文件的路径.')
+flags.DEFINE_string('train_dataset', '/media/files/yp/rbm/dataset/train11_RGB.npy', '训练集 .npy 文件的路径.')
+flags.DEFINE_string('train_labels', '/media/files/yp/rbm/label/binary/train_11.npy', '训练标签 .npy 文件的路径.')
+flags.DEFINE_string('valid_dataset', '/media/files/yp/rbm/dataset/valid11_RGB.npy', '验证集 .npy 文件的路径.')
+flags.DEFINE_string('valid_labels', '/media/files/yp/rbm/label/binary/valid_11.npy', '验证标签 .npy 文件的路径.')
+flags.DEFINE_string('test_dataset', '/media/files/yp/rbm/pic_div/dataset/test0_RGB.npy', '测试集 .npy 文件的路径.')
+flags.DEFINE_string('test_labels', '/media/files/yp/rbm/pic_div/label/binary/0.npy', '测试标签 .npy 文件的路径.')
 flags.DEFINE_string('cifar_dir', '', ' cifar 10 数据集目录路径.')
 flags.DEFINE_boolean('do_pretrain', True, '是否使用无监督预训练网络.')
-flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions.npy', '保存模型预测结果的 .npy '
-                                                                                                  '文件的路径.')
-flags.DEFINE_string('save_layers_output_test', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对测试集输出的 .npy 文件的路径.')
-flags.DEFINE_string('save_layers_output_train', '/media/files/yp/rbm/output/layers_output/', '保存模型各层对训练集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_predictions', '/media/files/yp/rbm/output/predictions/predictions0.npy', '保存模型预测结果的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_test', '', '保存模型各层对测试集输出的 .npy 文件的路径.')
+flags.DEFINE_string('save_layers_output_train', '', '保存模型各层对训练集输出的 .npy 文件的路径.')
 flags.DEFINE_integer('seed', -1, '随机发生器的种子（> = 0）. 适用于测试超参数.')
-flags.DEFINE_string('name', 'sdae', '模型的名称.')
+flags.DEFINE_string('name', 'change_detection_sdae', '模型的名称.')
 flags.DEFINE_float('momentum', 0.5, '动量参数.')
 
 # 有监督的微调的参数
@@ -147,7 +146,22 @@ if __name__ == '__main__':
         encoded_X, encoded_vX = sdae.pretrain(trX, vlX)
 
     # 有监督微调
-    sdae.fit(trX, trY, vlX, vlY)
+    # sdae.fit(trX, trY, vlX, vlY)
+
+    # # TODO 添加批处理代码
+    # for ind in range(0, 40):
+    #     FLAGS.test_dataset = '/media/files/yp/rbm/dataset/test02/test02_9_RGB.npy'
+    #     FLAGS.test_labels = '/media/files/yp/rbm/label/binary/label02_9.npy'
+    #     FLAGS.save_predictions = '/media/files/yp/rbm/output/predictions/predictions02_9.npy'
+    #     teX, teY = load_from_np(FLAGS.test_dataset), load_from_np(FLAGS.test_labels)
+    #     # 计算模型在测试集上的准确率
+    #     print('Test set accuracy: {}'.format(sdae.score(teX, teY)))
+    #     # 保存模型的预测
+    #     if FLAGS.save_predictions:
+    #         print('Saving the predictions for the test set...')
+    #         np.save(FLAGS.save_predictions, sdae.predict(teX))
+    #
+    # # TODO 批量测试时请注释以下代码，单个测试时请注释两个TODO 之间的代码
 
     # 计算模型在测试集上的准确率
     print('Test set accuracy: {}'.format(sdae.score(teX, teY)))
@@ -178,3 +192,5 @@ if __name__ == '__main__':
     if FLAGS.save_layers_output_train:
         print('Saving the output of each layer for the train set')
         save_layers_output('train')
+
+    print '-------------------------------------------预测过程已经完成---------------------------------------------------'
