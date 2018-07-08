@@ -10,7 +10,7 @@ import sys
 def view_bar(num, total):
     rate = num * 1.0 / total
     rate_num = int(rate * 100)
-    r = '\r[%s%s]%d%%' % ("*" * rate_num, "-" * (100 - rate_num), rate_num,)
+    r = '\r[%s%s]%d%%  %d / %d' % ("*" * rate_num, "-" * (100 - rate_num), rate_num, num, total,)
     sys.stdout.write(r)
     sys.stdout.flush()
 
@@ -105,18 +105,17 @@ def get_shadow_img(path):
 #     result = cv2.medianBlur(img, 9)
 #     cv2.imwrite("C:/Users/qq619/Desktop/PCA+HSI/quzao/" + str(ind) + ".jpg", result)
 
-predictions_dir = "/media/files/yp/rbm/yinchuansanqu/predictions/img/"
-label1_dir = "/media/files/yp/rbm/yinchuansanqu/2015/"
-label2_dir = "/media/files/yp/rbm/yinchuansanqu/2016/"
+predictions_dir = "/media/files/yp/rbm/yinchuansanqu/predictions/16-17/"
+label1_dir = "/media/files/yp/rbm/yinchuansanqu/2016/xingqing/raw/"
+label2_dir = "/media/files/yp/rbm/yinchuansanqu/201701/"
 f_list1 = os.listdir(predictions_dir)
 file_num = 0
 for file_name in f_list1:
-    file_id = os.path.splitext(file_name)[0]
     if os.path.splitext(file_name)[1] == '.jpg':
-
+        file_id = os.path.splitext(file_name)[0].split("gf")[1]
         img = cv2.imread(predictions_dir + file_name, 0)
-        img1_path = label1_dir + "2015gf" + file_id + '.TIF'
-        img2_path = label2_dir + "2016gf" + file_id + '.TIF'
+        img1_path = label1_dir + "2016gf" + file_id + '.TIF'
+        img2_path = label2_dir + "201701gf" + file_id + '.TIF'
         shadow1 = get_shadow_img(img1_path)
         shadow2 = get_shadow_img(img2_path)
         rows, cols = img.shape
@@ -127,8 +126,8 @@ for file_name in f_list1:
                     shadow_change[i, j] = 255
                     if img[i, j] != 0:
                         img[i, j] = 0
-        # cv2.imwrite("C:/Users/qq619/Desktop/PCA+HSI/img-shadow_change/" + str(ind) + ".jpg", img)
+        cv2.imwrite(predictions_dir + "img-shadow_change/" + file_name, img)
         result = cv2.medianBlur(img, 9)
-        cv2.imwrite(predictions_dir + 'quzao/' + file_id + '.jpg', result)
+        cv2.imwrite(predictions_dir + 'quzao/' + file_name, result)
         file_num = file_num + 1
         view_bar(file_num, len(f_list1))

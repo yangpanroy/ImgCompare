@@ -476,8 +476,8 @@ if __name__ == '__main__':
     os.environ["CUDA_VISIBLE_DEVICES"] = '1'  # 指定第二块GPU可用
     os.system('ulimit -n 2048')
 
-    img1_dir = '/media/files/yp/rbm/yinchuansanqu/2015/'  # 时相1图像的路径
-    img2_dir = '/media/files/yp/rbm/yinchuansanqu/2016/'  # 时相2图像的路径
+    img1_dir = '/media/files/yp/rbm/yinchuansanqu/2015/test/'  # 时相1图像的路径
+    img2_dir = '/media/files/yp/rbm/yinchuansanqu/2016/test/'  # 时相2图像的路径
     # label_dir = '/media/files/yp/rbm/pic_div/label/'  # 标签图像的路径
     predictions_dir = '/media/files/yp/rbm/yinchuansanqu/predictions/'  # 存/放预测结果的路径
     files_num = check_num_in_path(img1_dir, img2_dir)

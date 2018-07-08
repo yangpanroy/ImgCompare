@@ -1,21 +1,41 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Roy">
     <words>
+      <w>adagrad</w>
+      <w>bianhua</w>
       <w>cifar</w>
       <w>cuda</w>
       <w>dataset</w>
+      <w>defn</w>
+      <w>denoise</w>
+      <w>denosing</w>
       <w>finetune</w>
       <w>finetuning</w>
+      <w>frac</w>
+      <w>imshow</w>
+      <w>imwrite</w>
       <w>lenth</w>
+      <w>meanshift</w>
       <w>minibatch</w>
       <w>mnist</w>
+      <w>ndarray</w>
+      <w>papsz</w>
+      <w>pred</w>
       <w>pretrain</w>
       <w>pretraining</w>
+      <w>qiefen</w>
+      <w>quzao</w>
       <w>regcoef</w>
       <w>relu</w>
+      <w>sanqu</w>
       <w>sdae</w>
+      <w>shapefile</w>
       <w>softmax</w>
       <w>tanh</w>
+      <w>uint</w>
+      <w>wangge</w>
+      <w>yinchuan</w>
+      <w>yinchuansanqu</w>
     </words>
   </dictionary>
 </component>

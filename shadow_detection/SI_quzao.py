@@ -74,9 +74,9 @@ def get_shadow_img(path):
 
 
 start = datetime.datetime.now()
-img = cv2.imread("C:/Users/qq619/Desktop/0.jpg", 0)
-shadow1 = get_shadow_img("C:/Users/qq619/Desktop/pipei.tif")
-shadow2 = get_shadow_img("C:/Users/qq619/Desktop/read_tif2.tif")
+img = cv2.imread("C:/Users/qq619/Desktop/21123.jpg", 0)
+shadow1 = get_shadow_img("D:/yinchuanyingxiang/2015fenge/pipei/2015gf21123.TIF")
+shadow2 = get_shadow_img("D:/yinchuanyingxiang/2016fenge/RGB/2016gf21123.TIF")
 rows, cols = img.shape
 shadow_change = np.zeros((rows, cols))
 for i in range(rows):
@@ -90,6 +90,8 @@ for i in range(rows):
 # cv2.imshow("shadow2", shadow2)
 # cv2.imshow("shadow_change", shadow_change)
 # cv2.imshow("img - shadow_change", img)
+# cv2.waitKey()
+# cv2.destroyAllWindows()
 cv2.imwrite("C:/Users/qq619/Desktop/shadow_change.jpg", shadow_change)
 cv2.imwrite("C:/Users/qq619/Desktop/img-shadow_change.jpg", img)
 

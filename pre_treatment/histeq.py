@@ -32,17 +32,17 @@ def view_bar(num, total):
     sys.stdout.flush()
 
 
-path1 = "D:/yinchuanyingxiang/2016fenge/"
-path2 = "D:/yinchuanyingxiang/2015fenge/"
+path1 = "E:/result/SupervisedModel/2015/"
+path2 = "E:/result/SupervisedModel/2016/"
 f_list1 = os.listdir(path1)
 f_list2 = os.listdir(path2)
 file_num = 0
 for i in f_list1:
-    if os.path.splitext(i)[1] == '.TIF':
-        file_id = i.split("gf")[-1]
-        another_file_name = "2015gf" + file_id
-        if another_file_name in f_list2:
-            refImg = cv2.imread(path2 + another_file_name)
+    if os.path.splitext(i)[1] == '.png':
+        # file_id = i.split("gf")[-1]
+        # another_file_name = "201702gf" + file_id
+        if i in f_list2:
+            refImg = cv2.imread(path2 + i)
             oriImg = cv2.imread(path1 + i)
             outImg1 = hp.histMatching(oriImg[:, :, 0], refImg[:, :, 0])
             outImg2 = hp.histMatching(oriImg[:, :, 1], refImg[:, :, 1])
@@ -50,6 +50,6 @@ for i in f_list1:
             outImg = cv2.merge([outImg1, outImg2, outImg3])
             cv2.imwrite(path1 + "pipei/" + i, outImg)
             file_num = file_num + 1
-            view_bar(file_num, len(f_list1) / 4)
+            view_bar(file_num, len(f_list2))
         else:
             print i

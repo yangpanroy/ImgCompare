@@ -64,7 +64,6 @@ def view_bar(num, total):
 
 # 以下代码用来重命名图片
 predictions_dir = "C:\\Users\\qq619\\Desktop\\predictions\\img\\"
-label_dir = "D:\\yinchuanyingxiang\\2016fenge\\pipei\\"
 f_list1 = os.listdir(predictions_dir)
 file_num = 0
 for i in f_list1:
