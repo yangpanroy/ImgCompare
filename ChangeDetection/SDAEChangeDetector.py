@@ -8,6 +8,7 @@ import numpy as np
 import ogr
 import shapely.affinity
 import shapely.geometry
+import shutil
 import tensorflow as tf
 from shapely.geometry import MultiPolygon, Polygon
 from yadlt.models.autoencoders import stacked_denoising_autoencoder
@@ -34,6 +35,12 @@ class SDAEChangeDetector(object):
         self.img1Dir = self.workspace + "phase1/"  # 时相 1 图像块目录，用于存放时相 1 图像切割的图像块
         self.img2Dir = self.workspace + "phase2/"  # 时相 2 图像块目录，用于存放时相 2 图像切割的图像块
 
+    def convertRGB(self, img):
+        b = cv2.split(img)[0]
+        g = cv2.split(img)[1]
+        r = cv2.split(img)[2]
+        return cv2.merge((r, g, b))
+
     def splitDualPhaseImage(self):
         """
         切割两时相图像。用固定参数生成 CMD 指令字符串，通过调用 arcpy 切分
@@ -41,6 +48,7 @@ class SDAEChangeDetector(object):
         调用前应确保 commandLine 中的 arcpy 环境路径和切分脚本 splitImage.py 路径正确
         :return:
         """
+        status = True
         imgSuffixName = "TIFF"  # 切分后要生成的图像块的格式
         img1PrefixName = "img1"  # 时相 1 切分后图像块的公共前缀
         img2PrefixName = "img2"  # 时相 2 切分后图像块的公共前缀
@@ -57,16 +65,38 @@ class SDAEChangeDetector(object):
             print("正在切分时相 1 图像...")
             commandLine = "C:/Python27/ArcGIS10.2/python.exe D:/new_code/ypTest/splitImage.py {0} {1} {2} {3} {4}".format(
                 self.img1Path, self.img1Dir, img1PrefixName, imgSuffixName, gridPath)
-            os.system(commandLine)
+            sta = os.system(commandLine)
+            if sta != 0:
+                print("切分时相 1 图像出错！")
+                status = False
+                return status
             # 切分时相 2 图像
             print("正在切分时相 2 图像...")
             commandLine = "C:/Python27/ArcGIS10.2/python.exe D:/new_code/ypTest/splitImage.py {0} {1} {2} {3} {4}".format(
                 self.img2Path, self.img2Dir, img2PrefixName, imgSuffixName, gridPath)
-            os.system(commandLine)
+            sta = os.system(commandLine)
+            if sta != 0:
+                print("切分时相 2 图像出错！")
+                status = False
+                return status
         else:
-            cv2.imwrite(self.img1Dir + img1PrefixName + "1.TIF", img1)
-            cv2.imwrite(self.img2Dir + img2PrefixName + "1.TIF", img2)
-        print("切分图像完毕！")
+            tfwSrcPath1 = os.path.split(self.img1Path)[0] + "\\" + os.path.splitext(os.path.split(self.img1Path)[1])[0] + ".tfw"
+            tfwSrcPath2 = os.path.split(self.img2Path)[0] + "\\" + os.path.splitext(os.path.split(self.img2Path)[1])[0] + ".tfw"
+            if os.path.exists(tfwSrcPath1) and os.path.exists(tfwSrcPath2):
+                tfwDstPath1 = self.img1Dir + img1PrefixName + "1.tfw"
+                tfwDstPath2 = self.img2Dir + img2PrefixName + "1.tfw"
+                tifDstPath1 = self.img1Dir + img1PrefixName + "1.TIF"
+                tifDstPath2 = self.img2Dir + img2PrefixName + "1.TIF"
+                shutil.copy(tfwSrcPath1, tfwDstPath1)
+                shutil.copy(tfwSrcPath2, tfwDstPath2)
+                shutil.copy(self.img1Path, tifDstPath1)
+                shutil.copy(self.img2Path, tifDstPath2)
+            else:
+                print("未找到与切分图像匹配的 TFW 文件！请检查！")
+                status = False
+        if status:
+            print("切分图像完毕！")
+        return status
 
     @staticmethod
     def initFlags(predictMode):
@@ -137,6 +167,8 @@ class SDAEChangeDetector(object):
         :param imgType: list 类型。用于指明两时相图像通道顺序，默认为 ["RGB", "RGB"]。若有的图像的红蓝通道颠倒，则为 "BGR"
         :return:
         """
+        status = True
+        os.environ["CUDA_VISIBLE_DEVICES"] = '1'  # 指定第二块GPU可用
         if imgType is None:
             imgType = ["BGR", "BGR"]
         tempDir = self.workspace + 'temp/'  # 定义临时目录的路径
@@ -161,9 +193,9 @@ class SDAEChangeDetector(object):
                     # 读取成对的两时相图像
                     img1, img2 = self.readImage(img1Path, img2Path)
                     if imgType[0] == "BGR":
-                        img1 = img1[:, :, (2, 1, 0)]
+                        img1 = self.convertRGB(img1)
                     if imgType[1] == "BGR":
-                        img2 = img2[:, :, (2, 1, 0)]
+                        img2 = self.convertRGB(img2)
                     # 预测两时相图像变化检测结果
                     print("开始预测两时相图像变化检测结果...")
                     prediction = self.predictSingle(img1, img2, FLAGS, tempDir, batchSize)
@@ -182,6 +214,7 @@ class SDAEChangeDetector(object):
             self.clearDir(tempDir)
             self.clearDir(self.img1Dir)
             self.clearDir(self.img2Dir)
+        return status
 
     def readImage(self, img1Path, img2Path):
         """
@@ -191,8 +224,8 @@ class SDAEChangeDetector(object):
         :return: ndarray 类型。时相 1 和时相 2 图像（已匹配）
         """
         # 读取图像
-        img1 = cv2.imread(img1Path, 3)
-        img2 = cv2.imread(img2Path, 3)
+        img1 = cv2.imread(img1Path)
+        img2 = cv2.imread(img2Path)
         # 确保图像深度为 uint8 类型
         img1 = self.convertUint8(img1)
         img2 = self.convertUint8(img2)
